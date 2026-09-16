@@ -239,16 +239,80 @@ Lalu kita coba verivikasi pada client
 
 ## Soal_6
 Mika mencurigai adanya anomali traffic pada segmen jaringannya.
-Jalankan generator traffic berikut (link file) pada node Mika, lalu
+Jalankan generator traffic pada node Mika, lalu
 lakukan packet sniffing menggunakan Wireshark pada interface node
 Mika. Terapkan display filter khusus untuk menyaring paket yang
 berprotokol DNS atau ICMP. Tunjukkan screenshot hasil filter beserta
 ringkasan paket yang lolos.
 
-## Soal
+Pertama, pada node Mika, kita perlu mendownload generator traffic dengan cara berikut.
+```
+wget https://drive.google.com/drive/folders/1ZjFvWIjvAQAjE9pPthm7V_bGyaSt93lY?usp=sharing
+```
+Jalankan file `traffic_protocol7.sh` yang sudah diunzip sebelumnya.
+```
+chmod +x traffic_protocol.sh
+./traffic_protocol.sh
+```
+Tampilan ketika sudah berjalan:
+![](photo/TrafficProtocol7.png)
 
+Kemudian, packet sniffing dilakukan dari kabel Mika dan Switch1 dengan menggunakan Wireshark.
 
+![](photo/PacketSniffing.png)
 
+Selanjutnya, untuk menyaring paket yang berprotokol DNS atau ICMP, terapkan filter dengan mengisi `dns or icmp` pada kolom filter.
+
+![](photo/filtercaptureno6.png)
+
+Tampilan ketika proses capturing dan ringkasan yang berhasil lolos.
+
+![](photo/captureno6.png)
+
+### Soal 7
+
+Chisa memutuskan mendirikan FTP Server pada node miliknya dengan shared folder di /var/wired/data. Terapkan kebijakan akses: user alice (hak akses read & write), user mika (dibatasi read-only), dan user eiri (dibatasi tanpa izin akses / blacklist). Buktikan konfigurasi dengan membuat file signal_alice.txt dari user alice, dan buktikan penolakan akses saat user eiri mencoba login.
+
+Untuk membuat FTP server pada node Chisa, kita perlu menginstall server package dengan `vsFTPD`
+```
+apk update
+apk add vsftpd acl
+```
+Command `acl` sendiri digunakan untuk membuat kebijakan akses untuk setiap user nantinya.
+![](photo/apkupdate.png)
+
+Sebelum menerapkan akses, perlu untuk membuat user dan passwordnya terlebih dahulu. Karena user yang akan dibuat akses hanyalah client Alice, Mika, dan Eiri, maka cukup sebagai berikut.
+```
+id alice
+id mika
+id eiri
+```
+Password akan diminta setelah mendaftarkan salah satu user.
+![](photo/setuserpassw.png)
+
+Untuk mengatur akses dari setiap client, digunakan command berikut.
+```
+mkdir -p /etc/vsftpd_users
+cat <<EOF  > /etc/vsftpd_users/alice
+write_enable=YES
+download_enable=YES
+dislist_enable=YES
+EOF
+```
+```
+mkdir -p /etc/vsftpd_users
+cat <<EOF  > /etc/vsftpd_users/mika
+write_enable=NO
+download_enable=YES
+dislist_enable=YES
+EOF
+```
+```
+echo "eiri" > /etc/vsftpd.user_list
+```
+![](photo/setaksesno7.png)
+
+Selanjutnya, untuk konfigurasi ke `/etc/vsftpd.conf` dengan command berikut:
 
 
 ## Soal_8
