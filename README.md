@@ -245,7 +245,7 @@ Mika. Terapkan display filter khusus untuk menyaring paket yang
 berprotokol DNS atau ICMP. Tunjukkan screenshot hasil filter beserta
 ringkasan paket yang lolos.
 
-
+## Soal
 
 
 
@@ -292,7 +292,7 @@ wget -O protocol7_manifesto.zip "https://drive.google.com/drive/folders/1S3hG0dn
 
 ![](photo/protocolmanifesto.png)
 
-Selanjutnya kita melakukan capture pada Wireshark dan melakukan set filter di wireshark
+Selanjutnya kita melakukan capture pada Wireshark dan melakukan set filter di wireshark.
 
 ```
 ftp || ftp-data
@@ -330,8 +330,188 @@ Penjelasan flag:
 - s 128 → ukuran payload 128 byte
 - i 0.3 → interval 0.3 detik antar paket
 
-Tunggu sampai selesai lalu cek di terminal dan wireshark
+Tunggu sampai selesai lalu cek di terminal dan wireshark.
 
 ![](photo/pingknightsno10.png)
 ![](photo/bukticaptureno10.png)
+
+## Soal_11
+Buktikan kelemahan protokol Telnet dengan membuat akun
+phantom_user dan password wired_ghost pada layanan telnetd di
+node Chisa. Lakukan login Telnet dari node Eiri ke node Chisa dan
+tangkap sesi menggunakan Wireshark. Tunjukkan kredensial plain text
+melalui fitur Follow TCP Stream, serta jelaskan mengapa setiap karakter
+terkirim dalam paket TCP terpisah.
+
+Sebelum membuktikan kelemahan protokol telnet, kita perlu meninstall beberapa setup service telnet untuk node Chisa.
+```
+apk add busybox-extras
+telnetd -l /bin/login &
+netstat -tlnp | grep 23
+apk add net-tools
+```
+
+Selanjutnya tetap pada node Chisa kita buat akun phantom_user (pastikan username dan password sesuai intruksi).
+```
+adduser -D phantom_user
+passwd phantom_user
+```
+pw: wired_ghost
+
+![](/photo/phantomuser.png)
+
+Setelah pembuatan akun kita coba login telnet dari node Eiri dan mengetik command untuk memastikan bahwa kita sudah berada di akun phantom_user.
+
+Bukti capture wireshark
+![](photo/bukticaptureno11.png)
+
+## Soal_12
+Alice mencurigai Knights menjalankan beberapa layanan rahasia di
+node-nya. Lakukan pemindaian port dari node Alice ke node Knights
+menggunakan Netcat (nc) untuk memeriksa port 22 (SSH) dan 80
+(HTTP) dalam keadaan terbuka, serta port rahasia 7777 dalam
+keadaan tertutup. Analisis di Wireshark perbedaan TCP Flag yang
+dikembalikan antara port terbuka (SYN-ACK) dengan port tertutup
+(RST-ACK).
+
+Sebelum melakukan pemindaian port dari node Alice ke node Knights menggunakan Netcat, dll. Kita perlu langkah awal.
+
+```
+//siapkan port SSH
+apk add openssh
+
+//jalankan servicenya
+ssh-keygen -A
+/usr/sbin/sshd
+
+//cek jalan listen di port SSH
+netstat -tlnp | grep :22
+```
+
+Setelah itu kita perlu siapkan HTTP di Knights
+```
+//jika belum install
+apk add python3
+
+python3 -m http.server 80 &
+
+//cek jalan
+netstat -tlnp | grep :80
+```
+
+Selanjutanya kita perlu melakukan scan port dari node Alice pakai Netcat. sebelumnya lakukan pengecekan apakah ada `nc` atau tidak jika tidak ada perlu install `apk add netcat-openbsd`
+
+Setelah itu kita scan ketiga port
+```
+nc -zv -w 2 10.81.3.10 22
+nc -zv -w 2 10.81.3.10 80
+nc -zv -w 2 10.81.3.10 7777
+```
+
+- -z -> scan mode, hanya cek koneksi
+- -v -> verbose, menampilkan hasil di terminal
+- -w 2 -> timeout 2 detik per percobaan
+
+Hasil di node akan langsung terlihat
+![](photo/netcatalice.png)
+
+Hasil Analisis:
+
+Perbedaan respons flag TCP menjadi dasar teknik *port scanning* untuk memetakan status layanan pada *host* target tanpa perlu membentuk koneksi penuh. Saat port terbuka (port 22 dan 80), *server* merespons paket **SYN** dengan **SYN-ACK** sebagai tahap kedua *TCP three-way handshake* untuk menandakan adanya layanan aktif yang siap menerima koneksi. Sebaliknya, jika port tertutup (port 7777) karena tidak ada layanan yang mendengarkan (*listening*), sistem operasi *server* akan menolak koneksi secara instan dengan mengirimkan paket **RST-ACK** (Reset-Acknowledge) untuk memutuskan sesi seketika.
+
+## Soal_13
+RouterLain memerintahkan agar administrasi jarak jauh menggunakan SSH
+secara aman tanpa password. Install OpenSSH server pada node
+Knights, buat pasangan kunci SSH (ssh-keygen) pada node Mika untuk
+user mika_admin, dan konfigurasikan public key authentication
+(PasswordAuthentication no). Lakukan koneksi SSH dari node Mika ke
+node Knights, tangkap sesi menggunakan Wireshark, identifikasi paket
+Protocol Version Exchange dan Key Exchange, serta jelaskan mengapa
+kredensial tidak terlihat dalam bentuk teks terbuka seperti pada Telnet.
+
+Sebelum membuat pasangan kunci SSH kita perlu melakukan isntalasi openssh pada node Knights.
+```
+apk add openssh
+ssh-keygen -A
+/usr/sbin/sshd
+
+//lalu cek jalan
+netstat -tlnp | grep :22
+```
+
+Selanjutnya pada node Knights juga kita perlu membuat user mika_admin.
+```
+adduser -D mika_admin
+
+echo "mika_admin:dummy123" | chpasswd
+```
+Tidak perlu set password karena kita mau public key authentication, bukan password.
+
+![](photo/sshknights.png)
+Pada saat cat /root/.ssh/id_ed25519.pub kita perlu menyalin `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM0owaJOoafALSTwkHXrDWCB9lbo9D8OlHnsgQy59rEZ` ini merupakan key nya.
+
+
+Lalu, pada node Mika kita buat pasangan kunci SSH
+```
+ssh-keygen -t ed25519
+```
+Saat diminta:
+
+- File to save the key → tekan Enter saja (pakai default /root/.ssh/id_ed25519)
+
+- Passphrase → tekan Enter (kosongkan, supaya login benar-benar tanpa input tambahan/password)
+
+Lalu kita perlu cek hasilnya
+```
+ls -l /root/.ssh/
+```
+
+![](photo/sshmika.png)
+Terlihat bahwa kita berhasil membuat pasagan kunci SSH. Harus muncul id_ed25519 (private key) dan id_ed25519.pub (public key).
+
+Selanjutnya, pindah ke node Knights lalu buat folder .ssh unuk mika_admin dan tempel key nya. Jangam lupa set permission. Juga mengganti konfigurasi PasswordAuthentication Yes menjadi No (Hapus # jika ada)
+```
+mkdir -p /home/mika_admin/.ssh
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM0owaJOoafALSTwkHXrDWCB9lbo9D8OlHnsgQy59rEZ" >> /home/mika_admin/.ssh/authorized_keys
+```
+![](photo/authenticationno.png)
+
+Kemudian kita cek apakah koneksi ssh kita berjalan dengan baik melalui node Mika
+
+![](photo/sshnodemika.png)
+
+Saat login kita cek login ke ssh Mika dapat dilakukan untuk melakukan capture connection tersebut menggunkan wireshark.
+![](photo/bukticaptureno13.png)
+
+Pertanyaan:
+Mengapa kredensial tidak terlihat dalam bentuk teks terbuka seperti pada Telnet?
+
+Jawaban:
+Berbeda dari Telnet yang mentransmisikan kredensial dalam bentuk *plaintext*, SSH menjamin keamanan kredensial karena proses autentikasi baru dilakukan setelah jalur enkripsi terbentuk melalui tahap *Key Exchange* (KEX). Menggunakan algoritma kriptografi asimetris seperti Diffie Hellman, *client* dan *server* menyepakati *shared secret key* tanpa pernah mentransmisikan kunci tersebut melalui jaringan. Lebih lanjut, autentikasi berbasis *public key* memanfaatkan mekanisme *challenge response*, sehingga *private key* tidak pernah dikirimkan. Alhasil, seluruh lalu lintas data termasuk kredensial terenkripsi secara total menggunakan *symmetric key*, membuat analisis paket di Wireshark hanya menampilkan data biner acak bertuliskan *"Encrypted Packet"*.
+
+## Soal_14
+14.Setelah gagal mengakses FTP, Eiri melancarkan serangan brute-force login | web Alice. wired_bruteforce.pcapng untuk mengidentifikasi alamat IP penyerang, target IP beserta port yang diserang, password user lain_admin yang berhasil ditembus, serta web server software dan versi yang dilaporkan pada response header. Validasi temuan kalian pada socket server: (link file) nc [IP_Group] 3401
+Analisis | file capture terhadap form
+
+Filter `http`
+![](photo/filterhttp.png)
+
+Ini untuk mencari paket-paket POST /login.php yang datang bertubi-tubi dari sumber yang sama.
+
+Filter lebih spesifik `http.response.code == 200 && ip.addr == 172.26.7.100`
+![](photo/buktibruteforce.png)
+
+Hasil analisis
+- Alamat IP penyerang : 172.26.7.50
+![](photo/ippenyerang.png)
+
+- Port penyerang : 172.26.7.100, port 8080
+![](photo/portpenyerang.png)
+
+- User yang ditembus : lain_admin
+- Password yang berhasil : wired_pr0tocol_7
+- Web server software : Apache/2.4.62
+
+Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
+![](photo/pertanyaanterjawab.png)
 
