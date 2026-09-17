@@ -242,10 +242,6 @@ Cek status_sh
 
 ![](photo/cekstatus_sh.png)
 
-Lalu kita coba verivikasi pada client 
-
-![](photo/chisapinggoogle.png)
-
 ## Soal_6
 Mika mencurigai adanya anomali traffic pada segmen jaringannya.
 Jalankan generator traffic pada node Mika, lalu
@@ -690,6 +686,11 @@ Untuk mendapat pesan rahasia, kita perlu menggunakan
 Eiri meletakkan file malware di server. Dari file capture wired_ftp_theft.pcap, lakukan analisis lalu lintas FTP untuk mengidentifikasi alamat IP server FTP penyerang, banner software FTP yang digunakan, kredensial login penyerang, serta ukuran (size in bytes) dari file malware knights_payload.exe yang diunduh. Validasi temuan kalian pada socket server:
 ([link file](./resources/soal16_wired_ftp_theft.pcapng)) nc 10.4.89.247 3403 
 
+Kita buka terlebih dahulu file yang diberikan, lalu filter file tersebut dengan `FTP`
+
+![](photo/filterno20.png)
+![](photo/carijawabanno16.png)
+![](photo/buktijawabanno16.png)
 
 ### Soal_17
 Alice membuat halaman web di node-nya. Eiri memanfaatkan celah untuk mengunduh payload berbahaya ke sistem Alice. Analisis file capture wired_http_c2.pcap untuk mengidentifikasi nama domain (Host) tempat malware diunduh, alamat IP server penyerang, nama file executable malware yang diunduh, serta kode status HTTP yang dikembalikan. Validasi temuan kalian pada socket server:
@@ -724,6 +725,17 @@ Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
 Eiri mengubah taktik penyerangan dengan menanamkan file malware menggunakan protokol file sharing SMB. Analisis file capture wired_smb_transfer.pcapng untuk mengidentifikasi nama protokol jaringan yang dieksploitasi, IP pengirim dan penerima, folder tujuan penyimpanan malware pada sistem korban, serta nama file executable malware yang ditransfer. Validasi temuan kalian pada socket server:
 ([link file](./resources/soal18_wired_smb_transfer.pcapng)) nc 10.4.89.247 3405
 
+Sebelum mulai mengerjakan kita coba lihat file soal18_wired_smb_transfer.pcapng pada wireshark. Lalu filter file tersebut dengan `SMB2` karena pada soal Eiri melakukan penyerangan di file malware SMB.
+
+![](photo/captureno18filtersmb.png)
+
+Daripacket list yang ada, semua jawaban sudah bisa diambil.
+
+![](/photo/carijawabanno18.png)
+
+Bukti bahwa semua jawaban sudah terjawab.
+
+![](/photo/buktijawabanno18.png)
 
 ### Soal_19
 Eiri meneror jaringan dengan mengirimkan email pemerasan melalui protokol SMTP tanpa enkripsi. Analisis file capture wired_smtp_threat.pcap pada stream TCP terkait, identifikasi alamat email korban yang ditargetkan, password korban yang diklaim bocor oleh penyerang, jenis malware yang diinfeksikan, batas waktu (dalam hari) yang diberikan, serta MailClientID yang tercantum pada pesan. Validasi temuan kalian pada socket server: ([link file](./resources/soal19_wired_smtp_threat.pcapng)) nc 10.4.89.247 3406
@@ -746,7 +758,19 @@ Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
 ### Soal_20
 Untuk rencana pamungkasnya, Eiri menyembunyikan komunikasi malware di balik saluran terenkripsi TLS. Namun Alice telah menyediakan file keylog untuk mendekripsi lalu lintas data tersebut. Analisis file capture wired_tls_decrypt.pcapng bersama keyslogfile.txt untuk mengidentifikasi versi protokol TLS yang dinegosiasikan, nama domain (SNI) yang diakses, alamat IP server HTTPS penyerang, User-Agent yang digunakan, serta HTTP request method dan path yang tersembunyi di dalam sesi dekripsi. Validasi temuan kalian pada socket server: ([link file](./resources/wired_tls_decrypt.pcapng)) nc 10.4.89.247 3407
 
+Pada file soal .pcap jika dibuka terlihat banyak pake TLSv1.2, ini sudah menjawab soal pertama.
 
+![](photo/filepcapno20.png)
 
+Pada file keyslogfile.txt merupakan TLS maka kita perlu mendecrypt paket tersebut menggunakan master-secret log pada interface TLS. Nanti akan terlihat seperti ini.
 
+![](photo/carijawabanno20.png)
 
+Selanjutnya kita perlu melakukan pencarian jawaban pada file yang sudah di decrypt,
+kita coba follow file tersebut, maka akan muncul jawbannya.
+
+![](photo/jawabanno20.png)
+
+Ini bukti pertanyaan sudah terawab.
+
+![](photo/buktiterjawabno20.png)
