@@ -283,11 +283,12 @@ Command `acl` sendiri digunakan untuk membuat kebijakan akses untuk setiap user 
 
 Sebelum menerapkan akses, perlu untuk membuat user dan passwordnya terlebih dahulu. Karena user yang akan dibuat akses hanyalah client Alice, Mika, dan Eiri, maka cukup sebagai berikut.
 ```
-id alice
-id mika
-id eiri
+adduser alice
+adduser mika
+adduser eiri
 ```
-Password akan diminta setelah mendaftarkan salah satu user.
+Password akan diminta setelah mendaftarkan user.
+
 ![](photo/setuserpassw.png)
 
 Untuk mengatur akses dari setiap client, digunakan command berikut.
@@ -312,8 +313,67 @@ echo "eiri" > /etc/vsftpd.user_list
 ```
 ![](photo/setaksesno7.png)
 
-Selanjutnya, untuk konfigurasi ke `/etc/vsftpd.conf` dengan command berikut:
+Selanjutnya, overwrite konfigurasi ke `/etc/vsftpd.conf` dilakukan dengan command berikut:
+```
+cat <<EOF > /etc/vsftpd.conf
+local_enable=YES
+write_enable=YES
+local_root=/var/wired/data
+chroot_local_user=YES
+allow_writeable_chroot=YES
+user_config_dir=/etc/vsftpd_users
+userlist_enable=YES
+userlist_deny=YES
+userlist_file=/etc/vsftpd.user_list
+EOF
+```
+Salah satunya adalah membuat aksesnya read/write ke folder FTP. Dan juga membuat config usernya menjadi folder based config yang diletakkan ke `/etc/vsftpd_users`.
 
+Kemudian, berikutnya adalah menjalankan FTP server vsftpd di background pada node Chisa.
+```
+vsftpd /etc/vsftpd/vsftpd.conf &
+```
+![](photo/runningftpsever.png)
+
+Maka, FTP server sudah berjalan di background dengan PID 436.
+
+Nah, selanjutnya kita mencoba FTP ke node lain menggunakan client Alice. 
+Command yang digunakan untuk login sebagai user alice adalah sebagai berikut.
+```
+lftp -u alice 10.81.2.10
+```
+`10.81.2.10` adalah IP dari target FTP server yaitu Chisa.
+
+![](photo/loginalice.png)
+
+Command `set ftp:passive-mode true` di sini digunakan untuk mengaktifkan mode pasif pada koneksi FTP antara Alice dan Chisa agar proses transfer file dan pengambilan daftar file dapat berjalan dengan baik, di mana sebelumnya koneksi sering tidak terhubung (dalam mode active).
+
+Selanjutnya adalah membuktikan konfigurasi pada user alice, kita membuat file `signal_alice.txt`. Pada lftp alice, command berikut dijalankan.
+```
+put signal_alice.txt
+```
+Dengan akses user alice dapat read/write, maka konfigurasi terbukti berhasil.
+
+![](photo/putfilealice.png)
+
+![](photo/prooffilealice.png)
+
+File berhasil dibuat oleh user alice.
+
+Pembuktian selanjutnya pada user mika, yaitu read-only.
+Melalui mika, kita login sebagai user mika
+```
+lftp -u mika 10.81.2.10
+```
+![](photo/proofmika.png)
+
+Dari gambar di atas, mika dapat melihat list directory, tetapi tidak bisa membuat file.
+
+Pada user eiri, akses dibatasi (blacklist).
+```
+lftp -u eiri 10.81.2.10
+```
+![](photo/proofeiri.png)
 
 ## Soal_8
 Kelompok rahasia Knights perlu mengirimkan dokumen laporan
@@ -512,6 +572,7 @@ echo "mika_admin:dummy123" | chpasswd
 Tidak perlu set password karena kita mau public key authentication, bukan password.
 
 ![](photo/sshknights.png)
+
 Pada saat cat /root/.ssh/id_ed25519.pub kita perlu menyalin `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM0owaJOoafALSTwkHXrDWCB9lbo9D8OlHnsgQy59rEZ` ini merupakan key nya.
 
 
@@ -531,6 +592,7 @@ ls -l /root/.ssh/
 ```
 
 ![](photo/sshmika.png)
+
 Terlihat bahwa kita berhasil membuat pasagan kunci SSH. Harus muncul id_ed25519 (private key) dan id_ed25519.pub (public key).
 
 Selanjutnya, pindah ke node Knights lalu buat folder .ssh unuk mika_admin dan tempel key nya. Jangam lupa set permission. Juga mengganti konfigurasi PasswordAuthentication Yes menjadi No (Hapus # jika ada)
@@ -545,6 +607,7 @@ Kemudian kita cek apakah koneksi ssh kita berjalan dengan baik melalui node Mika
 ![](photo/sshnodemika.png)
 
 Saat login kita cek login ke ssh Mika dapat dilakukan untuk melakukan capture connection tersebut menggunkan wireshark.
+
 ![](photo/bukticaptureno13.png)
 
 Pertanyaan:
@@ -558,18 +621,22 @@ Berbeda dari Telnet yang mentransmisikan kredensial dalam bentuk *plaintext*, SS
 Analisis | file capture terhadap form
 
 Filter `http`
+
 ![](photo/filterhttp.png)
 
 Ini untuk mencari paket-paket POST /login.php yang datang bertubi-tubi dari sumber yang sama.
 
 Filter lebih spesifik `http.response.code == 200 && ip.addr == 172.26.7.100`
+
 ![](photo/buktibruteforce.png)
 
 Hasil analisis
 - Alamat IP penyerang : 172.26.7.50
+
 ![](photo/ippenyerang.png)
 
 - Port penyerang : 172.26.7.100, port 8080
+
 ![](photo/portpenyerang.png)
 
 - User yang ditembus : lain_admin
@@ -577,5 +644,7 @@ Hasil analisis
 - Web server software : Apache/2.4.62
 
 Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
+
 ![](photo/pertanyaanterjawab.png)
 
+## Soal_15
