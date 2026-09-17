@@ -1,4 +1,4 @@
-#!/bin/bash [BELUM SELESAI]
+#!/bin/bash
 
 # Node Knights
 wget knights.zip "https://drive.google.com/drive/folders/1tvZpueSH9E3GWwXM6KNnM64Y5wNoIAYP?usp=sharing"
