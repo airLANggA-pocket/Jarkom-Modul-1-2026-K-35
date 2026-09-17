@@ -617,7 +617,8 @@ Jawaban:
 Berbeda dari Telnet yang mentransmisikan kredensial dalam bentuk *plaintext*, SSH menjamin keamanan kredensial karena proses autentikasi baru dilakukan setelah jalur enkripsi terbentuk melalui tahap *Key Exchange* (KEX). Menggunakan algoritma kriptografi asimetris seperti Diffie Hellman, *client* dan *server* menyepakati *shared secret key* tanpa pernah mentransmisikan kunci tersebut melalui jaringan. Lebih lanjut, autentikasi berbasis *public key* memanfaatkan mekanisme *challenge response*, sehingga *private key* tidak pernah dikirimkan. Alhasil, seluruh lalu lintas data termasuk kredensial terenkripsi secara total menggunakan *symmetric key*, membuat analisis paket di Wireshark hanya menampilkan data biner acak bertuliskan *"Encrypted Packet"*.
 
 ## Soal_14
-14.Setelah gagal mengakses FTP, Eiri melancarkan serangan brute-force login | web Alice. wired_bruteforce.pcapng untuk mengidentifikasi alamat IP penyerang, target IP beserta port yang diserang, password user lain_admin yang berhasil ditembus, serta web server software dan versi yang dilaporkan pada response header. Validasi temuan kalian pada socket server: (link file) nc [IP_Group] 3401
+14.Setelah gagal mengakses FTP, Eiri melancarkan serangan brute-force login | web Alice. wired_bruteforce.pcapng untuk mengidentifikasi alamat IP penyerang, target IP beserta port yang diserang, password user lain_admin yang berhasil ditembus, serta web server software dan versi yang dilaporkan pada response header. Validasi temuan kalian pada socket server: (link file) nc 10.4.89.247 3401
+
 Analisis | file capture terhadap form
 
 Filter `http`
@@ -648,3 +649,33 @@ Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
 ![](photo/pertanyaanterjawab.png)
 
 ## Soal_15
+Eiri menyusup ke ruang server dan memasang perangkat keyboard USB berbahaya pada node Alice. Buka file capture wired_usb_hid.pcap, identifikasi Vendor ID dan Product ID perangkat USB dari deskriptor USB, alamat nomor device USB, serta pesan rahasia yang berhasil dicuri dari keystroke. Validasi temuan pada socket server:
+(link file) nc 10.4.89.247 3402 
+
+Pertama, buka capture packet  `wired_usb_hid.pcap` di wireshark, kemudian untuk menemukan vendor ID dan product ID, kita bisa melihatnya pada dengan memasang filter:
+`usb.bDescriptorType == 0x01`
+
+![](photo/filterno15.png)
+
+Pada device descriptor, kita dapat menemukan vendor ID dan product ID yang dicari.
+
+![](photo/no15-1.png)
+
+- Vendor ID: 0x046d
+- Product ID: 0xc31c
+
+Selanjutnya, untuk alamat nomor device USB, kita dapat menggunakan filter: `usb.device_address`
+
+![](photo/filterno15-2.png)
+
+Maka, kita menemukan device address: 7
+
+![](photo/no15-2.png)
+
+Untuk mendapat pesan rahasia, kita perlu menggunakan 
+
+
+
+
+
+
