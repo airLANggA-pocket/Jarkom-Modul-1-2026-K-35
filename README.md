@@ -10,21 +10,7 @@
   - [Soal 3: Konfigurasi Routing & Static IP Client](#soal_3)
   - [Soal 4: Firewall, NAT Masquerade & DNS Resolver](#soal_4)
   - [Soal 5: Persistensi Konfigurasi & Script Verifikasi](#soal_5)
-  - [Soal 6: Anomali Traffic & Packet Sniffing (Filter DNS/ICMP)](#soal_6)
-  - [Soal 7: FTP Server & Kebijakan Hak Akses (vsftpd)](#soal-7)
-  - [Soal 8: Upload FTP Client & Analisis Mode PASV di Wireshark](#soal_8)
-  - [Soal 9: Unduhan FTP & Validasi Akses Read-Only](#soal_9)
-  - [Soal 10: Uji Latensi Jaringan (Ping Payload Khusus & RTT)](#soal_10)
-  - [Soal 11: Kelemahan Protokol Telnet (Plaintext Credential)](#soal_11)
-  - [Soal 12: Pemindaian Port dengan Netcat (TCP Flag Analisis)](#soal_12)
-  - [Soal 13: Konfigurasi SSH Public Key Authentication](#soal_13)
-  - [Soal 14: Analisis Serangan Brute-Force Login HTTP](#soal_14)
-  - [Soal 15: Analisis USB HID & Pencurian Pesan dari Keystroke](#soal_15)
-  - [Soal 16: Analisis Lalu Lintas FTP Theft & Malware](#soal_16)
-  - [Soal 17: Analisis HTTP C2 & Unduhan Payload Berbahaya](#soal_17)
-  - [Soal 18: Analisis Transfer Malware via Protokol SMB](#soal_18)
-  - [Soal 19: Analisis Email Pemerasan via SMTP Terbuka](#soal_19)
-  - [Soal 20: Dekripsi Komunikasi TLS Malware dengan Master-Secret Log](#soal_20)
+  - [Soal 6](#soal_6)
 
 | Nama | NRP |
 | ---------------------- | ---------- |
@@ -290,18 +276,37 @@ Tampilan ketika proses capturing dan ringkasan yang berhasil lolos.
 
 Hasil capture: [link](./captures/capture-eru-manwe.pcapng)
 
-### Soal 7
-
+### Soal_7
 Chisa memutuskan mendirikan FTP Server pada node miliknya dengan shared folder di /var/wired/data. Terapkan kebijakan akses: user alice (hak akses read & write), user mika (dibatasi read-only), dan user eiri (dibatasi tanpa izin akses / blacklist). Buktikan konfigurasi dengan membuat file signal_alice.txt dari user alice, dan buktikan penolakan akses saat user eiri mencoba login.
 
-Untuk membuat FTP server pada node Chisa, kita perlu menginstall server package dengan `vsFTPD`
+Untuk membuat FTP server pada node Chisa, kita perlu menginstall server package dengan `vsFTPd`
 ```
 apk update
-apk add vsftpd acl
+apk add vsftpd
 ```
-Command `acl` sendiri digunakan untuk membuat kebijakan akses untuk setiap user nantinya.
 
 ![](photo/apkupdate.png)
+
+Selanjutnya, overwrite konfigurasi ke `/etc/vsftpd.conf` dilakukan dengan command berikut:
+```
+cat <<EOF > /etc/vsftpd.conf
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+local_root=/var/wired/data
+chroot_local_user=YES
+allow_writeable_chroot=YES
+user_config_dir=/etc/vsftpd_users
+userlist_enable=YES
+userlist_deny=YES
+userlist_file=/etc/vsftpd.user_list
+listen=YES
+listen_ipv6=NO
+pam_service_name=vsftpd
+seccomp_sandbox=NO
+EOF
+```
+Salah satunya adalah membuat aksesnya read/write ke folder FTP. Dan juga membuat config usernya menjadi folder based config yang diletakkan ke `/etc/vsftpd_users`.
 
 Sebelum menerapkan akses, perlu untuk membuat user dan passwordnya terlebih dahulu. Karena user yang akan dibuat akses hanyalah client Alice, Mika, dan Eiri, maka cukup sebagai berikut.
 ```
@@ -334,22 +339,6 @@ EOF
 echo "eiri" > /etc/vsftpd.user_list
 ```
 ![](photo/setaksesno7.png)
-
-Selanjutnya, overwrite konfigurasi ke `/etc/vsftpd.conf` dilakukan dengan command berikut:
-```
-cat <<EOF > /etc/vsftpd.conf
-local_enable=YES
-write_enable=YES
-local_root=/var/wired/data
-chroot_local_user=YES
-allow_writeable_chroot=YES
-user_config_dir=/etc/vsftpd_users
-userlist_enable=YES
-userlist_deny=YES
-userlist_file=/etc/vsftpd.user_list
-EOF
-```
-Salah satunya adalah membuat aksesnya read/write ke folder FTP. Dan juga membuat config usernya menjadi folder based config yang diletakkan ke `/etc/vsftpd_users`.
 
 Kemudian, berikutnya adalah menjalankan FTP server vsftpd di background pada node Chisa.
 ```
@@ -739,17 +728,6 @@ Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
 Eiri mengubah taktik penyerangan dengan menanamkan file malware menggunakan protokol file sharing SMB. Analisis file capture wired_smb_transfer.pcapng untuk mengidentifikasi nama protokol jaringan yang dieksploitasi, IP pengirim dan penerima, folder tujuan penyimpanan malware pada sistem korban, serta nama file executable malware yang ditransfer. Validasi temuan kalian pada socket server:
 ([link file](./resources/soal18_wired_smb_transfer.pcapng)) nc 10.4.89.247 3405
 
-Sebelum mulai mengerjakan kita coba lihat file soal18_wired_smb_transfer.pcapng pada wireshark. Lalu filter file tersebut dengan `SMB2` karena pada soal Eiri melakukan penyerangan di file malware SMB.
-
-![](photo/captureno18filtersmb.png)
-
-Daripacket list yang ada, semua jawaban sudah bisa diambil.
-
-![](/photo/carijawabanno18.png)
-
-Bukti bahwa semua jawaban sudah terjawab.
-
-![](/photo/buktijawabanno18.png)
 
 ### Soal_19
 Eiri meneror jaringan dengan mengirimkan email pemerasan melalui protokol SMTP tanpa enkripsi. Analisis file capture wired_smtp_threat.pcap pada stream TCP terkait, identifikasi alamat email korban yang ditargetkan, password korban yang diklaim bocor oleh penyerang, jenis malware yang diinfeksikan, batas waktu (dalam hari) yang diberikan, serta MailClientID yang tercantum pada pesan. Validasi temuan kalian pada socket server: ([link file](./resources/soal19_wired_smtp_threat.pcapng)) nc 10.4.89.247 3406
