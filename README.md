@@ -626,7 +626,7 @@ Jawaban:
 Berbeda dari Telnet yang mentransmisikan kredensial dalam bentuk *plaintext*, SSH menjamin keamanan kredensial karena proses autentikasi baru dilakukan setelah jalur enkripsi terbentuk melalui tahap *Key Exchange* (KEX). Menggunakan algoritma kriptografi asimetris seperti Diffie Hellman, *client* dan *server* menyepakati *shared secret key* tanpa pernah mentransmisikan kunci tersebut melalui jaringan. Lebih lanjut, autentikasi berbasis *public key* memanfaatkan mekanisme *challenge response*, sehingga *private key* tidak pernah dikirimkan. Alhasil, seluruh lalu lintas data termasuk kredensial terenkripsi secara total menggunakan *symmetric key*, membuat analisis paket di Wireshark hanya menampilkan data biner acak bertuliskan *"Encrypted Packet"*.
 
 ## Soal_14
-14.Setelah gagal mengakses FTP, Eiri melancarkan serangan brute-force login | web Alice. wired_bruteforce.pcapng untuk mengidentifikasi alamat IP penyerang, target IP beserta port yang diserang, password user lain_admin yang berhasil ditembus, serta web server software dan versi yang dilaporkan pada response header. Validasi temuan kalian pada socket server: (link file) nc 10.4.89.247 3401
+14.Setelah gagal mengakses FTP, Eiri melancarkan serangan brute-force login | web Alice. wired_bruteforce.pcapng untuk mengidentifikasi alamat IP penyerang, target IP beserta port yang diserang, password user lain_admin yang berhasil ditembus, serta web server software dan versi yang dilaporkan pada response header. Validasi temuan kalian pada socket server: ([link file](./resources/soal14_wired_bruteforce.pcapng)) nc 10.4.89.247 3401
 
 Analisis | file capture terhadap form
 
@@ -659,7 +659,7 @@ Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
 
 ## Soal_15
 Eiri menyusup ke ruang server dan memasang perangkat keyboard USB berbahaya pada node Alice. Buka file capture wired_usb_hid.pcap, identifikasi Vendor ID dan Product ID perangkat USB dari deskriptor USB, alamat nomor device USB, serta pesan rahasia yang berhasil dicuri dari keystroke. Validasi temuan pada socket server:
-(link file) nc 10.4.89.247 3402 
+([link file](./resources/soal15_wired_usb_hid.pcap)) nc 10.4.89.247 3402 
 
 Pertama, buka capture packet  `wired_usb_hid.pcap` di wireshark, kemudian untuk menemukan vendor ID dan product ID, kita bisa melihatnya pada dengan memasang filter:
 `usb.bDescriptorType == 0x01`
@@ -684,11 +684,13 @@ Maka, kita menemukan device address: 7
 Untuk mendapat pesan rahasia, kita perlu menggunakan 
 
 ### Soal_16
+Eiri meletakkan file malware di server. Dari file capture wired_ftp_theft.pcap, lakukan analisis lalu lintas FTP untuk mengidentifikasi alamat IP server FTP penyerang, banner software FTP yang digunakan, kredensial login penyerang, serta ukuran (size in bytes) dari file malware knights_payload.exe yang diunduh. Validasi temuan kalian pada socket server:
+([link file](./resources/soal16_wired_ftp_theft.pcapng)) nc 10.4.89.247 3403 
 
 
 ### Soal_17
 Alice membuat halaman web di node-nya. Eiri memanfaatkan celah untuk mengunduh payload berbahaya ke sistem Alice. Analisis file capture wired_http_c2.pcap untuk mengidentifikasi nama domain (Host) tempat malware diunduh, alamat IP server penyerang, nama file executable malware yang diunduh, serta kode status HTTP yang dikembalikan. Validasi temuan kalian pada socket server:
-(link file) nc 10.4.89.247 3404
+([link file](./resources/soal17_wired_http_c2.pcapng)) nc 10.4.89.247 3404
 
 Identifikasi nama domain (Host) dan alamat IP server penyerang dengan menerapkan filter `dns`.
 
@@ -716,9 +718,12 @@ Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
 ![](photo/success17.png)
 
 ### Soal_18
+Eiri mengubah taktik penyerangan dengan menanamkan file malware menggunakan protokol file sharing SMB. Analisis file capture wired_smb_transfer.pcapng untuk mengidentifikasi nama protokol jaringan yang dieksploitasi, IP pengirim dan penerima, folder tujuan penyimpanan malware pada sistem korban, serta nama file executable malware yang ditransfer. Validasi temuan kalian pada socket server:
+([link file](./resources/soal18_wired_smb_transfer.pcapng)) nc 10.4.89.247 3405
+
 
 ### Soal_19
-Eiri meneror jaringan dengan mengirimkan email pemerasan melalui protokol SMTP tanpa enkripsi. Analisis file capture wired_smtp_threat.pcap pada stream TCP terkait, identifikasi alamat email korban yang ditargetkan, password korban yang diklaim bocor oleh penyerang, jenis malware yang diinfeksikan, batas waktu (dalam hari) yang diberikan, serta MailClientID yang tercantum pada pesan. Validasi temuan kalian pada socket server: (link file) nc 10.4.89.247 3406
+Eiri meneror jaringan dengan mengirimkan email pemerasan melalui protokol SMTP tanpa enkripsi. Analisis file capture wired_smtp_threat.pcap pada stream TCP terkait, identifikasi alamat email korban yang ditargetkan, password korban yang diklaim bocor oleh penyerang, jenis malware yang diinfeksikan, batas waktu (dalam hari) yang diberikan, serta MailClientID yang tercantum pada pesan. Validasi temuan kalian pada socket server: ([link file](./resources/soal19_wired_smtp_threat.pcapng)) nc 10.4.89.247 3406
 
 Untuk mengidentifikasinya, kita dapat menerapkan filter `tcp.stream eq 6`
 
@@ -736,6 +741,8 @@ Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
 ![](photo/flag19.png)
 
 ### Soal_20
+Untuk rencana pamungkasnya, Eiri menyembunyikan komunikasi malware di balik saluran terenkripsi TLS. Namun Alice telah menyediakan file keylog untuk mendekripsi lalu lintas data tersebut. Analisis file capture wired_tls_decrypt.pcapng bersama keyslogfile.txt untuk mengidentifikasi versi protokol TLS yang dinegosiasikan, nama domain (SNI) yang diakses, alamat IP server HTTPS penyerang, User-Agent yang digunakan, serta HTTP request method dan path yang tersembunyi di dalam sesi dekripsi. Validasi temuan kalian pada socket server: ([link file](./resources/wired_tls_decrypt.pcapng)) nc 10.4.89.247 3407
+
 
 
 
