@@ -111,6 +111,7 @@ iface eth3 inet static
 Prefix kelompok kami adalah 10.81.x.x
 
 Selanjutnya kami mengecek interface apakah memiliki IP yang benar atau salah, degan menggunakan ip adrr show
+
 ![](photo/ipaddr.png)
 
  Pada gambar ini, sudah jelas interface memiliki IP yang sesuai dengan apa yang sudah dikonfigurasikan
@@ -163,14 +164,18 @@ iface eth0 inet static
 
 Lalu, kita melakukan test ping pada client.
 
-ALice to Others
+Alice to Others
 ![](photo/aliceping.png)
+
 Mika to others
 ![](photo/mikaping.png)
+
 Chisa to others
 ![](photo/chisaping.png)
+
 Knights to others
 ![](photo/eiriping.png)
+
 Eiri to others
 ![](photo/eiriping.png)
 
@@ -231,6 +236,7 @@ iface eth3 inet static
 ```
 
 Cek status_sh
+
 ![](photo/cekstatus_sh.png)
 
 Lalu kita coba verivikasi pada client 
@@ -269,6 +275,8 @@ Tampilan ketika proses capturing dan ringkasan yang berhasil lolos.
 
 ![](photo/captureno6.png)
 
+Hasil capture: [link](./captures/capture-eru-manwe.pcapng)
+
 ### Soal 7
 
 Chisa memutuskan mendirikan FTP Server pada node miliknya dengan shared folder di /var/wired/data. Terapkan kebijakan akses: user alice (hak akses read & write), user mika (dibatasi read-only), dan user eiri (dibatasi tanpa izin akses / blacklist). Buktikan konfigurasi dengan membuat file signal_alice.txt dari user alice, dan buktikan penolakan akses saat user eiri mencoba login.
@@ -279,6 +287,7 @@ apk update
 apk add vsftpd acl
 ```
 Command `acl` sendiri digunakan untuk membuat kebijakan akses untuk setiap user nantinya.
+
 ![](photo/apkupdate.png)
 
 Sebelum menerapkan akses, perlu untuk membuat user dan passwordnya terlebih dahulu. Karena user yang akan dibuat akses hanyalah client Alice, Mika, dan Eiri, maka cukup sebagai berikut.
