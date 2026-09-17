@@ -23,6 +23,8 @@ EOF
 
 mkdir -p /etc/vsftpd_users
 
+sed -i 's#:/bin/false$#:/bin/sh#' /etc/passwd
+
 cat <<EOF > /etc/vsftpd_users/alice
 write_enable=YES
 download_enable=YES
