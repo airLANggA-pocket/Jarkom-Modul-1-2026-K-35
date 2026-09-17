@@ -180,18 +180,23 @@ iface eth0 inet static
 Lalu, kita melakukan test ping pada client.
 
 Alice to Others
+
 ![](photo/aliceping.png)
 
 Mika to others
+
 ![](photo/mikaping.png)
 
 Chisa to others
+
 ![](photo/chisaping.png)
 
 Knights to others
+
 ![](photo/eiriping.png)
 
 Eiri to others
+
 ![](photo/eiriping.png)
 
 ## Soal_4
@@ -275,6 +280,7 @@ chmod +x traffic_protocol.sh
 ./traffic_protocol.sh
 ```
 Tampilan ketika sudah berjalan:
+
 ![](photo/TrafficProtocol7.png)
 
 Kemudian, packet sniffing dilakukan dari kabel Mika dan Switch1 dengan menggunakan Wireshark.
