@@ -281,17 +281,36 @@ Tampilan ketika proses capturing dan ringkasan yang berhasil lolos.
 Hasil capture: [link](./captures/capture-eru-manwe.pcapng)
 
 ### Soal 7
-
 Chisa memutuskan mendirikan FTP Server pada node miliknya dengan shared folder di /var/wired/data. Terapkan kebijakan akses: user alice (hak akses read & write), user mika (dibatasi read-only), dan user eiri (dibatasi tanpa izin akses / blacklist). Buktikan konfigurasi dengan membuat file signal_alice.txt dari user alice, dan buktikan penolakan akses saat user eiri mencoba login.
 
-Untuk membuat FTP server pada node Chisa, kita perlu menginstall server package dengan `vsFTPD`
+Untuk membuat FTP server pada node Chisa, kita perlu menginstall server package dengan `vsFTPd`
 ```
 apk update
-apk add vsftpd acl
+apk add vsftpd
 ```
-Command `acl` sendiri digunakan untuk membuat kebijakan akses untuk setiap user nantinya.
 
 ![](photo/apkupdate.png)
+
+Selanjutnya, overwrite konfigurasi ke `/etc/vsftpd.conf` dilakukan dengan command berikut:
+```
+cat <<EOF > /etc/vsftpd.conf
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+local_root=/var/wired/data
+chroot_local_user=YES
+allow_writeable_chroot=YES
+user_config_dir=/etc/vsftpd_users
+userlist_enable=YES
+userlist_deny=YES
+userlist_file=/etc/vsftpd.user_list
+listen=YES
+listen_ipv6=NO
+pam_service_name=vsftpd
+seccomp_sandbox=NO
+EOF
+```
+Salah satunya adalah membuat aksesnya read/write ke folder FTP. Dan juga membuat config usernya menjadi folder based config yang diletakkan ke `/etc/vsftpd_users`.
 
 Sebelum menerapkan akses, perlu untuk membuat user dan passwordnya terlebih dahulu. Karena user yang akan dibuat akses hanyalah client Alice, Mika, dan Eiri, maka cukup sebagai berikut.
 ```
@@ -324,22 +343,6 @@ EOF
 echo "eiri" > /etc/vsftpd.user_list
 ```
 ![](photo/setaksesno7.png)
-
-Selanjutnya, overwrite konfigurasi ke `/etc/vsftpd.conf` dilakukan dengan command berikut:
-```
-cat <<EOF > /etc/vsftpd.conf
-local_enable=YES
-write_enable=YES
-local_root=/var/wired/data
-chroot_local_user=YES
-allow_writeable_chroot=YES
-user_config_dir=/etc/vsftpd_users
-userlist_enable=YES
-userlist_deny=YES
-userlist_file=/etc/vsftpd.user_list
-EOF
-```
-Salah satunya adalah membuat aksesnya read/write ke folder FTP. Dan juga membuat config usernya menjadi folder based config yang diletakkan ke `/etc/vsftpd_users`.
 
 Kemudian, berikutnya adalah menjalankan FTP server vsftpd di background pada node Chisa.
 ```
