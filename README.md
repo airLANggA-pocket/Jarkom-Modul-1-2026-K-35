@@ -10,7 +10,21 @@
   - [Soal 3: Konfigurasi Routing & Static IP Client](#soal_3)
   - [Soal 4: Firewall, NAT Masquerade & DNS Resolver](#soal_4)
   - [Soal 5: Persistensi Konfigurasi & Script Verifikasi](#soal_5)
-  - [Soal 6](#soal_6)
+  - [Soal 6: Packet Sniffing pada Anomali Traffic](#soal_6)
+  - [Soal 7: FTP Server Menggunakan vsFTPd](#soal_7)
+  - [Soal 8: Koneksi FTP Client dari User Lainnya](#soal_8)
+  - [Soal 9: Pengujian Akses Read-Only](#soal_9)
+  - [Soal 10: Uji Ketahanan Koneksi Jaringan The Wired](#soal_10)
+  - [Soal 11: Pembuktian Kelemahan Protokol Telnet](#soal_11)
+  - [Soal 12: Analisis Perbedaan Port Terbuka dan Tertutup pada TCP FLag](#soal_12)
+  - [Soal 13: Koneksi OpenSSH dan Identifikasi](#soal_13)
+  - [Soal 14: Analisis Serangan Brute-Force](#soal_14)
+  - [Soal 15: Analisis Perangkat Keyboard USB](#soal_15)
+  - [Soal 16: Analisis Lalu Lintas FTP](#soal_16)
+  - [Soal 17: Analisis Payload pada Sistem](#soal_17)
+  - [Soal 18: Analisis Menggunakan Protokol SMB](#soal_18)
+  - [Soal 19: Analisis Email Pemerasan pada Protokol SMTP](#soal_19)
+  - [Soal 20: Analisis Lalu Lintas Malware](#soal_20)
 
 | Nama | NRP |
 | ---------------------- | ---------- |
@@ -280,7 +294,7 @@ Tampilan ketika proses capturing dan ringkasan yang berhasil lolos.
 
 Hasil capture: [link](./captures/capture-eru-manwe.pcapng)
 
-### Soal 7
+### Soal_7
 Chisa memutuskan mendirikan FTP Server pada node miliknya dengan shared folder di /var/wired/data. Terapkan kebijakan akses: user alice (hak akses read & write), user mika (dibatasi read-only), dan user eiri (dibatasi tanpa izin akses / blacklist). Buktikan konfigurasi dengan membuat file signal_alice.txt dari user alice, dan buktikan penolakan akses saat user eiri mencoba login.
 
 Untuk membuat FTP server pada node Chisa, kita perlu menginstall server package dengan `vsFTPd`
@@ -726,7 +740,6 @@ Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
 ### Soal_18
 Eiri mengubah taktik penyerangan dengan menanamkan file malware menggunakan protokol file sharing SMB. Analisis file capture wired_smb_transfer.pcapng untuk mengidentifikasi nama protokol jaringan yang dieksploitasi, IP pengirim dan penerima, folder tujuan penyimpanan malware pada sistem korban, serta nama file executable malware yang ditransfer. Validasi temuan kalian pada socket server:
 ([link file](./resources/soal18_wired_smb_transfer.pcapng)) nc 10.4.89.247 3405
-
 
 ### Soal_19
 Eiri meneror jaringan dengan mengirimkan email pemerasan melalui protokol SMTP tanpa enkripsi. Analisis file capture wired_smtp_threat.pcap pada stream TCP terkait, identifikasi alamat email korban yang ditargetkan, password korban yang diklaim bocor oleh penyerang, jenis malware yang diinfeksikan, batas waktu (dalam hari) yang diberikan, serta MailClientID yang tercantum pada pesan. Validasi temuan kalian pada socket server: ([link file](./resources/soal19_wired_smtp_threat.pcapng)) nc 10.4.89.247 3406
