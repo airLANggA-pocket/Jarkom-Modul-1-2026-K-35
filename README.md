@@ -698,7 +698,17 @@ Maka, kita menemukan device address: 7
 
 ![](photo/no15-2.png)
 
-Untuk mendapat pesan rahasia, kita perlu menggunakan 
+Untuk mendapat pesan rahasia, kita perlu menggunakan Untuk mendapat pesan rahasia, kita perlu menggunakan filter `usb.capdata`. Kemudian, kita mengambil leftover capture data tersebut.
+
+![](photo/filter15-3.png)
+
+Pesan rahasianya dapat ditemukan dengan menjalankan [kode ini](./resources/decode.py).
+
+- Pesan rahasia: Wired_Protocol_7_is_alive_2026
+
+Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
+
+![](photo/flag15.png)
 
 ### Soal_16
 Eiri meletakkan file malware di server. Dari file capture wired_ftp_theft.pcap, lakukan analisis lalu lintas FTP untuk mengidentifikasi alamat IP server FTP penyerang, banner software FTP yang digunakan, kredensial login penyerang, serta ukuran (size in bytes) dari file malware knights_payload.exe yang diunduh. Validasi temuan kalian pada socket server:
