@@ -10,7 +10,21 @@
   - [Soal 3: Konfigurasi Routing & Static IP Client](#soal_3)
   - [Soal 4: Firewall, NAT Masquerade & DNS Resolver](#soal_4)
   - [Soal 5: Persistensi Konfigurasi & Script Verifikasi](#soal_5)
-  - [Soal 6](#soal_6)
+  - [Soal 6: Anomali Traffic & Packet Sniffing (Filter DNS/ICMP)](#soal_6)
+  - [Soal 7: FTP Server & Kebijakan Hak Akses (vsftpd)](#soal-7)
+  - [Soal 8: Upload FTP Client & Analisis Mode PASV di Wireshark](#soal_8)
+  - [Soal 9: Unduhan FTP & Validasi Akses Read-Only](#soal_9)
+  - [Soal 10: Uji Latensi Jaringan (Ping Payload Khusus & RTT)](#soal_10)
+  - [Soal 11: Kelemahan Protokol Telnet (Plaintext Credential)](#soal_11)
+  - [Soal 12: Pemindaian Port dengan Netcat (TCP Flag Analisis)](#soal_12)
+  - [Soal 13: Konfigurasi SSH Public Key Authentication](#soal_13)
+  - [Soal 14: Analisis Serangan Brute-Force Login HTTP](#soal_14)
+  - [Soal 15: Analisis USB HID & Pencurian Pesan dari Keystroke](#soal_15)
+  - [Soal 16: Analisis Lalu Lintas FTP Theft & Malware](#soal_16)
+  - [Soal 17: Analisis HTTP C2 & Unduhan Payload Berbahaya](#soal_17)
+  - [Soal 18: Analisis Transfer Malware via Protokol SMB](#soal_18)
+  - [Soal 19: Analisis Email Pemerasan via SMTP Terbuka](#soal_19)
+  - [Soal 20: Dekripsi Komunikasi TLS Malware dengan Master-Secret Log](#soal_20)
 
 | Nama | NRP |
 | ---------------------- | ---------- |
