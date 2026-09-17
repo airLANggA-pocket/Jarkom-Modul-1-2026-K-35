@@ -180,13 +180,12 @@ Eiri to others
 ![](photo/eiriping.png)
 
 ## Soal_4
-Lain ingin agar setiap Entitas (Client) memiliki kemandirian di The
-Wired. Konfigurasikan firewall/iptables (NAT Masquerade) dan DNS
+Lain ingin agar setiap Entitas (Client) memiliki kemandirian di The Wired. Konfigurasikan firewall/iptables (NAT Masquerade) dan DNS
 resolver agar setiap Client dapat terhubung ke internet secara mandiri
 (dapat melakukan ping ke 8.8.8.8 dan membuka domain web
 google.com).
 
-Agar client dapat ping ke 8.8.8.8 dan resolve domain google.com secara mandiri kita perlu mengecek file /etc/resolve.cong
+Agar client dapat ping ke 8.8.8.8 dan resolve domain google.com secara mandiri kita perlu mengecek file `/etc/resolve.conf`
 
 ![](photo/resolve.png)
 
@@ -194,9 +193,13 @@ Resolving servernya adalah 10.81.1.1 maka IP ini akan ditambahkan ke masing masi
 
 Selanjutnya kita mengecek apakah masing-masing client dapat terhubung ke internet atau tidak.
 
-![](photo/chisagoogle.png)
+![](photo/alice-ping-google.png)
+![](photo/mika-ping-google.png)
+![](photo/chisa-ping-google.png)
+![](photo/knights-ping-google.png)
+![](photo/eiri-ping-google.png)
 
-Jawabannya client dapat terhubung ke internet
+Jawabannya client dapat terhubung ke internet.
 
 ## Soal_5
 Eiri tetap berupaya menanamkan kekacauan ke dalam jaringan. Untuk
