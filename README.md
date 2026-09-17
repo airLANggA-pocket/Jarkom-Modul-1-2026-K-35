@@ -683,7 +683,7 @@ Maka, kita menemukan device address: 7
 
 ![](photo/no15-2.png)
 
-Untuk mendapat pesan rahasia, kita perlu menggunakan 
+Untuk mendapat pesan rahasia, kita perlu menggunakan
 
 ### Soal_16
 Eiri meletakkan file malware di server. Dari file capture wired_ftp_theft.pcap, lakukan analisis lalu lintas FTP untuk mengidentifikasi alamat IP server FTP penyerang, banner software FTP yang digunakan, kredensial login penyerang, serta ukuran (size in bytes) dari file malware knights_payload.exe yang diunduh. Validasi temuan kalian pada socket server:
