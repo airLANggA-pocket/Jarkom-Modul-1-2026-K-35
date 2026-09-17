@@ -674,7 +674,59 @@ Maka, kita menemukan device address: 7
 
 Untuk mendapat pesan rahasia, kita perlu menggunakan 
 
+### Soal_16
 
+
+### Soal_17
+Alice membuat halaman web di node-nya. Eiri memanfaatkan celah untuk mengunduh payload berbahaya ke sistem Alice. Analisis file capture wired_http_c2.pcap untuk mengidentifikasi nama domain (Host) tempat malware diunduh, alamat IP server penyerang, nama file executable malware yang diunduh, serta kode status HTTP yang dikembalikan. Validasi temuan kalian pada socket server:
+(link file) nc 10.4.89.247 3404
+
+Identifikasi nama domain (Host) dan alamat IP server penyerang dengan menerapkan filter `dns`.
+
+![](photo/namadomain17.png)
+
+![](photo/ipaddrno17.png)
+
+Nama domain (host): wired-update.net
+Alamat IP server  : 203.0.113.42
+
+Untuk menganalisis nama file dan kode status HTTP, filter yang digunkan adalah `HTTP`.
+
+![filter](photo/filter17.png)
+
+- Nama file malware: navi_agent.exe
+
+![](/photo/filename17.png)
+
+- Kode status HTTP: 200
+
+![](photo/codestatus17.png)
+
+Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
+
+![](photo/success17.png)
+
+### Soal_18
+
+### Soal_19
+Eiri meneror jaringan dengan mengirimkan email pemerasan melalui protokol SMTP tanpa enkripsi. Analisis file capture wired_smtp_threat.pcap pada stream TCP terkait, identifikasi alamat email korban yang ditargetkan, password korban yang diklaim bocor oleh penyerang, jenis malware yang diinfeksikan, batas waktu (dalam hari) yang diberikan, serta MailClientID yang tercantum pada pesan. Validasi temuan kalian pada socket server: (link file) nc 10.4.89.247 3406
+
+Untuk mengidentifikasinya, kita dapat menerapkan filter `tcp.stream eq 6`
+
+![](photo/filter19.png)
+![](photo/19.png)
+
+- Alamat email korban: victim@protocol7.co.jp
+- Password korban    : pr0tocol_7_user
+- Jenis malware      : ransomware
+- Batas waktu (hari) : 3 hari
+- MailClientID       : 7719980706
+
+Ini adalah bukti bahwa pertanyaan sudah terjawab dengan benar.
+
+![](photo/flag19.png)
+
+### Soal_20
 
 
 
