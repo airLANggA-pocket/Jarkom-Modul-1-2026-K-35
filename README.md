@@ -424,7 +424,7 @@ Selanjutnya kita melakukan capturing traffic dari kabel Knights dan Switch 3
 Bukti capturing
 
 ![](photo/bukticapturingno8.png)
-
+[link](./captures/capture%20no%208.pcapng)
 ## Soal_9
 Mika mengakses dokumen Protokol Tujuh di (link file) dari FTP Server
 Chisa. Dari node Mika, unduh file tersebut menggunakan akun mika.
@@ -460,7 +460,7 @@ Masukkan password yang sudah dibuat lalu ambil dokumen tersebut
 
 tunggu sampai selesai lalu cek di wireshark
 ![](photo/bukticaptureno9.png)
-
+[link](./captures/capture%20no%209.pcapng)
 ## Soal_10
 Knights melancarkan uji ketahanan koneksi ke server Chisa untuk
 menguji latensi jaringan The Wired. Kirimkan paket ping dari node
@@ -484,7 +484,7 @@ Tunggu sampai selesai lalu cek di terminal dan wireshark.
 
 ![](photo/pingknightsno10.png)
 ![](photo/bukticaptureno10.png)
-
+[link](./captures/capture%20no%2010.pcapng)
 ## Soal_11
 Buktikan kelemahan protokol Telnet dengan membuat akun
 phantom_user dan password wired_ghost pada layanan telnetd di
@@ -514,7 +514,7 @@ Setelah pembuatan akun kita coba login telnet dari node Eiri dan mengetik comman
 
 Bukti capture wireshark
 ![](photo/bukticaptureno11.png)
-
+[link](./captures/capture%20no%2011.pcapng)
 ## Soal_12
 Alice mencurigai Knights menjalankan beberapa layanan rahasia di
 node-nya. Lakukan pemindaian port dari node Alice ke node Knights
@@ -568,7 +568,7 @@ Hasil di node akan langsung terlihat
 Hasil Analisis:
 
 Perbedaan respons flag TCP menjadi dasar teknik *port scanning* untuk memetakan status layanan pada *host* target tanpa perlu membentuk koneksi penuh. Saat port terbuka (port 22 dan 80), *server* merespons paket **SYN** dengan **SYN-ACK** sebagai tahap kedua *TCP three-way handshake* untuk menandakan adanya layanan aktif yang siap menerima koneksi. Sebaliknya, jika port tertutup (port 7777) karena tidak ada layanan yang mendengarkan (*listening*), sistem operasi *server* akan menolak koneksi secara instan dengan mengirimkan paket **RST-ACK** (Reset-Acknowledge) untuk memutuskan sesi seketika.
-
+[link](./captures/capture%20no%2012.pcapng)
 ## Soal_13
 RouterLain memerintahkan agar administrasi jarak jauh menggunakan SSH
 secara aman tanpa password. Install OpenSSH server pada node
@@ -635,7 +635,7 @@ Kemudian kita cek apakah koneksi ssh kita berjalan dengan baik melalui node Mika
 Saat login kita cek login ke ssh Mika dapat dilakukan untuk melakukan capture connection tersebut menggunkan wireshark.
 
 ![](photo/bukticaptureno13.png)
-
+[link](./captures/capture%20no%2013.pcapng)
 Pertanyaan:
 Mengapa kredensial tidak terlihat dalam bentuk teks terbuka seperti pada Telnet?
 
